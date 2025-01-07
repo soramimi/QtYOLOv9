@@ -129,11 +129,11 @@ std::optional<std::vector<YOLOv9Detector::BoundingBox>> YOLOv9Detector::inferenc
 	
 	// QImageを入力テンソルに変換
 	{
-		// 画素値を[0, 1]に正規化し、Packed RGB形式からPlanar RGB形式に変換
+		// 画素値を[0, 1]に正規化し、Packed RGB形式からPlanar BGR形式に変換
 		QImage img = image.convertToFormat(QImage::Format_RGB888).scaled(W, H, Qt::IgnoreAspectRatio, Qt::FastTransformation);
-		float *R = input_tensor_values.data() + H * W * 0;
+		float *B = input_tensor_values.data() + H * W * 0;
 		float *G = input_tensor_values.data() + H * W * 1;
-		float *B = input_tensor_values.data() + H * W * 2;
+		float *R = input_tensor_values.data() + H * W * 2;
 		for (int y = 0; y < H; y++) {
 			uint8_t const *src = img.scanLine(y);
 			for (int x = 0; x < W; x++) {

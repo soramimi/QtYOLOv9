@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "YOLOv9Detector.h"
+#include <QDebug>
+#include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPainter>
@@ -47,7 +49,7 @@ bool MainWindow::isModelReady() const
 bool MainWindow::loadModel()
 {
 	// 実行ファイルと同じ場所に yolov9.onnx が必要
-	return m->detector.loadModel("yolov9.onnx");
+	return m->detector.loadModel("yolov9.sim.onnx");
 }
 
 /**
@@ -76,6 +78,9 @@ void MainWindow::on_action_file_open_triggered()
 			return;
 		}
 	}
+
+	QElapsedTimer e;
+	e.start();
 	
 	// 物体検出
 	auto bboxes = m->detector.inference(m->image); // inference() は std::optional を返す
@@ -107,6 +112,8 @@ void MainWindow::on_action_file_open_triggered()
 		}
 	}
 	
+	qDebug() << "Elapsed time:" << e.elapsed() << "msec";
+
 	// 画像を表示
 	ui->centralwidget->setImage(m->image);
 }
